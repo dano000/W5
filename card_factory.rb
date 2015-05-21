@@ -1,2 +1,0 @@
-class CardFactory
-end

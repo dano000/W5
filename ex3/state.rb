@@ -1,96 +1,55 @@
+# Define what a light state is and it's associated time, add it to all states stack.
+
 class State
+  attr_reader :north_south,:east_west,:time, :all_states, :name
 
-  attr_reader :position, :next_state
   @@all_states = []
-
-  attr_accessor :condition
-
-  def initialize
-    puts @@all_states.length
-
-    @next_states = []
-
-    @condition = nil
-
-    if @@all_states.length == 0
-      @position = 0
-    else
-      @position = 1 + @@all_states[@@all_states.length - 1].position
-    end
-
+  def initialize(ns,ew,time)
+    @name = 'State' + (@@all_states.length+1).to_s
+    @north_south = ns
+    @east_west = ew
+    @time = time
     @@all_states.push(self)
   end
-
   def self.all_states
     @@all_states
   end
+end
 
-  def add_next_state(state)
+# Run the simulation with a virtual global clock for simulation_time amount of seconds.
+# sim_to_real_time = (real life seconds)/(simulated seconds)
+# (ie. a value of sim_to_real_time = 1, means 1 real second per simulated second)
 
-    if state.class == State.class
-      @next_states += state
-    else
-      puts "Please provide a valid state"
+class Simulation
+  def initialize(simulation_time,sim_to_real_time)
+    @st1 = State.new('Red','Green',40)
+    @st2 = State.new('Red','Amber',5)
+    @st3 = State.new('Green','Red',70)
+    @st4 = State.new('Amber','Red',5)
+
+    @time = 1
+    @cur_pos = 0
+    @cur = State.all_states[@cur_pos]
+
+    @simulation_time = simulation_time
+    @sim_to_real_time = sim_to_real_time
+
+  end
+
+  def run
+    (1..@simulation_time).each do |i|
+      if @time > @cur.time
+        @cur_pos = (@cur_pos +1) % State.all_states.length
+        @cur = State.all_states[@cur_pos]
+        @time = 1
+      end
+      puts 'NS: ' + @cur.north_south + ' EW: ' + @cur.east_west + ' internal time: ' + @time.to_s + ' global time: ' + i.to_s + " State Name: " + @cur.name
+      @time += 1
+      sleep(@sim_to_real_time)
     end
-
-
   end
-
 end
 
+sim = Simulation.new(240,0)
 
-
-
-
-class Light
-  def initialize(state= 'Red')
-
-    @state =%w(Red Amber Green)
-
-    @cur
-
-    case state
-      when "Red"
-        @cur = 0
-      when "Amber"
-        @cur = 1
-      when "Green"
-        @cur = 2
-    end
-
-  end
-  def cycle
-    @cur = (@cur + 1) % @states.length
-    @states[@cur]
-  end
-
-  def current
-    @states[@cur]
-  end
-
-end
-
-class LightSystem
-  def initialize
-
-
-    st0 = State.new
-    st1 = State.new
-    st2 = State.new
-    st3 = State.new
-
-    st0.next_state = st1
-    st1.next_state = st2
-    st2.next_state = st3
-    st3.next_state = st1
-
-    st0.condition = [light_ns,light_ew]
-    st1.condition = [light_ns,light_ew]
-    st2.condition = [light_ns,light_ew]
-    st3.condition = [light_ns,light_ew]
-
-  end
-
-
-
-end
+sim.run

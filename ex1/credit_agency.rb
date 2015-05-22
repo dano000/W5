@@ -22,4 +22,9 @@ class CreditAgency < PaymentGateway
 
   end
 
+  end
+
 end
+
+
+

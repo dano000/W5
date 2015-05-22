@@ -14,11 +14,16 @@ class Sale
     @total_discount = apply_discount
     @amount_payable = calc_payable
     @card = nil
+    @staff = nil
     @@sales.push(self)
   end
 
   def sales
     @@sales
+  end
+
+  def assign_staff(staff)
+    @staff = staff
   end
 
   def add_card(card)
@@ -56,11 +61,11 @@ def calc_payable
   apply_discount
 
   if @card.class == StoreCard.class
-    return ((100.0 - @card.discount)/100.0) *(@total - @total_discount)
+    ((100.0 - @card.discount)/100.0) *(@total - @total_discount)
   else
-    return (@total - @total_discount)
+    (@total - @total_discount)
+  end
 
 end
-
-
 end
+

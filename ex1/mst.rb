@@ -2,7 +2,7 @@ class MST
 
   @@all_mst = []
 
-  def initialize
+  def initialize(discount_server,sale_server,stock_server)
 
     @id = @@all_mst.length + 1
     @@all_mst.push(self)
@@ -11,6 +11,11 @@ class MST
     @supervisor_auth = false
     @current_sale = nil
     @current_card = nil
+
+    @disc_server = discount_server
+    @sale_server = sale_server
+    @stock_server = stock_server
+
 
   end
 
@@ -53,32 +58,37 @@ class MST
   end
 
   def charge_card
-    if(PaymentGateway.charge(@current_card,@current_sale.amount_payable))
-      return true
-    else
-      return false
-    end
+    (PaymentGateway.charge(@current_card, @current_sale.amount_payable)) ? true : false
   end
 
   def release_item(item)
-    if charge_card == true
-      @current_sale.
+    if charge_card
+      @current_sale.items_list.each do |i|
+        SecuritySystem.release(i.barcode)
+      end
     end
 
   end
 
   def query_staff(staff)
-
+    if @supervisor_auth == True
+    @sale_server.query_staff(staff)
+    else
+      put 'Access Denied: Must Login as Supervisor'
+    end
   end
 
   def query_discount_item(item)
-
+    if @supervisor_auth == True
+      @disc_server.query_disc_item(item)
+    else
+      put 'Access Denied: Must Login as Supervisor'
+    end
   end
-
-
 
   def self.all_mst
     @@all_mst
   end
 
 end
+

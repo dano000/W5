@@ -16,4 +16,5 @@ class StoreCard < Card
       return false
     end
 
-end
+  end
+

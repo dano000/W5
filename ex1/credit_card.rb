@@ -24,3 +24,4 @@ class CreditCard < Card
   end
 
 end
+

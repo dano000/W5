@@ -12,3 +12,4 @@ class Staff
     @@all_staff
   end
 end
+

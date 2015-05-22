@@ -8,3 +8,4 @@ class Card
     @validation = v
   end
 end
+

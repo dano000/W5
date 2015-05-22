@@ -7,3 +7,4 @@ class Supervisor < Staff
    @role = role
  end
 end
+

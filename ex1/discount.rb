@@ -1,9 +1,10 @@
 class Discount
 
-  def initialize(amount,startDate,endDate,type)
+  def initialize(amount,startDate,endDate)
     @amount = amount
-    @startDate = startDate
-    @endDate = endDate
+    @start_date = startDate
+    @end_date = endDate
   end
 
 end
+
